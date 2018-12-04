@@ -4,7 +4,7 @@ pipeline {
           stage("build & SonarQube analysis") {
             agent any
             steps {
-                sh 'mvn clean package sonar:sonar'
+                bat 'mvn clean package sonar:sonar'
               }
             }
         }
