@@ -1,9 +1,20 @@
-stage('Sonar Scan'){
-		sonar{
-			buildType = 'MAVEN'
-			runScan = true
-			pomFileLocation = 'sonar-scanner-jenkins/pom.xml'
-			analysisParameters = "mvn sonar:sonar -Dsonar.exclusions=*.java"
-		}
-	}
-}
+pipeline {
+        agent none
+        stages {
+          stage("build & SonarQube analysis") {
+            agent any
+            steps {
+              withSonarQubeEnv('My SonarQube Server') {
+                sh 'mvn clean package sonar:sonar'
+              }
+            }
+          }
+          stage("Quality Gate") {
+            steps {
+              timeout(time: 1, unit: 'HOURS') {
+                waitForQualityGate abortPipeline: true
+              }
+            }
+          }
+        }
+      }
