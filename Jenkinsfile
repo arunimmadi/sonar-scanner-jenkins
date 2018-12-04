@@ -1,5 +1,11 @@
 pipeline {
         agent none
+        stage ('Clone') {
+        git url: 'https://github.com/arunimmadi/sonar-scanner-jenkins'
+    }
+        stage ('Exec Maven') {
+        rtMaven.run pom: 'sonar-scanner-jenkins/pom.xml', goals: 'clean install', buildInfo: buildInfo
+    }
         stages {
           stage("build & SonarQube analysis") {
             agent any
@@ -9,12 +15,6 @@ pipeline {
               }
             }
           }
-          stage("Quality Gate") {
-            steps {
-              timeout(time: 1, unit: 'HOURS') {
-                waitForQualityGate abortPipeline: true
-              }
-            }
-          }
-        }
       }
+   }
+
