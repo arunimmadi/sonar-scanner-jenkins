@@ -1,7 +1,7 @@
-pipeline {
+	pipeline {
         agent none
         stages {
-          stage("build & SonarQube analysis") {
+          stage("edited the code") {
             agent any
             steps {
                 bat 'mvn clean package sonar:sonar'
